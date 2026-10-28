@@ -1,28 +1,30 @@
-name: Run Telegram Bot
+name: Telegram Bot 24/7
 
 on:
+  push:
+    branches: [ main ]
   schedule:
-    - cron: '*/5 * * * *' # يتم إعادة تشغيل الفحص كل 5 دقائق لضمان استمراره
+    - cron: '*/9 * * * *' # يتم إعادة تنشيطه كل 9 دقائق باستمرار
   workflow_dispatch:
 
 jobs:
-  build:
-  
+  run-bot:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-    - name: Install dependencies
-      run: |
-        pip install --no-cache-dir pyTelegramBotAPI requests
+      - name: Install dependencies
+        run: |
+          pip install --no-cache-dir pyTelegramBotAPI==4.14.0 requests==2.31.0
 
-    - name: Run bot
-      run: |
-        python main.py
+      - name: Run Bot script
+        run: |
+          python main.py
+        env:
+          PYTHONUNBUFFERED: "1"
